@@ -1,5 +1,65 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class RoomInventory {
+
+    private HashMap<String, Integer> inventory;
+
+    public RoomInventory() {
+        inventory = new HashMap<>();
+    }
+
+    public void addRoomType(String roomType, int count) {
+        inventory.put(roomType, count);
+    }
+
+    public int getAvailability(String roomType) {
+        return inventory.getOrDefault(roomType, 0);
+    }
+
+    public void updateAvailability(String roomType, int change) {
+        int current = inventory.getOrDefault(roomType, 0);
+        int updated = current + change;
+
+        if (updated < 0) {
+            System.out.println("Error: Not enough rooms available for " + roomType);
+        } else {
+            inventory.put(roomType, updated);
+        }
+    }
+
+    public void displayInventory() {
+        System.out.println("Current Room Inventory:");
+        for (Map.Entry<String, Integer> entry : inventory.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+}
+
 public class BookMyApp {
+
     public static void main(String[] args) {
-        System.out.println("Welcome to Hotel Booking System ");
+
+        RoomInventory inventory = new RoomInventory();
+
+        inventory.addRoomType("Single", 10);
+        inventory.addRoomType("Double", 5);
+        inventory.addRoomType("Suite", 2);
+
+        inventory.displayInventory();
+
+        System.out.println();
+
+        System.out.println("Available Single Rooms: " + inventory.getAvailability("Single"));
+
+        System.out.println("\nBooking 2 Single Rooms...");
+        inventory.updateAvailability("Single", -2);
+
+        System.out.println("Cancelling 1 Double Room...");
+        inventory.updateAvailability("Double", +1);
+
+        System.out.println();
+
+        inventory.displayInventory();
     }
 }
